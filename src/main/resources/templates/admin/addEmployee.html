@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Register</title>
+      <th:block th:replace="fragments/headers "></th:block>
+
+</head>
+
+<body class="bg-gradient-primary">
+
+    <div class="container">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+      
+                        <img  class="col-lg-5 d-none d-lg-flex " th:src="@{/resources/images/empimage.avif}">
+      
+                    <div class="col-lg-7">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Create Employee Account</h1>
+                            </div>
+                            <form class="user" th:object="${employee}" method="post">
+                                
+                                <div class="form-group ">
+                                   <input
+                th:replace="~{fragments/inputField :: input ('Name', 'name', 'text')}" />
+                            
+                                </div>
+                                <div class="form-group">
+                                     <input
+                th:replace="~{fragments/inputField :: input ('Username', 'username', 'email')}" />
+                                </div>
+                                       <div class="form-group">
+                                   <input
+                th:replace="~{fragments/inputField :: input ('Start Date', 'startDate', 'date')}" />
+                                   
+                                    </div>
+                                <div class="form-group ">
+                              <input
+                th:replace="~{fragments/inputField :: input ('Password', 'password', 'password')}" />
+                          
+  </div>
+                                        <button
+                    class="btn btn-primary btn-user  m-lg-4 w-75" type="submit" >Add Account</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+         <th:block th:replace="fragments/templateScripts "></th:block>
+
+
+</body>
+
+</html>
