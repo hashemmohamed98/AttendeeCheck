@@ -12,5 +12,7 @@ import  com.hashemmohamed98.attendeecheck.domain.security.Role;
  * @author #EM
  */
 public interface RoleRepository extends JpaRepository<Role, Integer>{
+
+    public Role findByName(String user);
     
 }

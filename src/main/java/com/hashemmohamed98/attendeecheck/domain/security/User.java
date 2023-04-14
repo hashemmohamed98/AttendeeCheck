@@ -6,6 +6,7 @@ package com.hashemmohamed98.attendeecheck.domain.security;
 
 
 import com.hashemmohamed98.attendeecheck.domain.Attendance;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,11 +45,10 @@ public class User implements UserDetails, CredentialsContainer {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private  Integer id;
-
+private String name;
 private String username;
 private String password;
-private String email;
- 
+private Date startDate; 
 @Singular
 @ManyToMany(cascade = {CascadeType.MERGE},fetch = FetchType.EAGER)
 @JoinTable(name = "user_role",joinColumns = {@JoinColumn(name = "USER_ID",referencedColumnName = "ID")},inverseJoinColumns ={@JoinColumn(name = "ROLE_ID",referencedColumnName = "ID")} )
