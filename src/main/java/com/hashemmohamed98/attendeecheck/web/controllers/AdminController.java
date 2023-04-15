@@ -9,11 +9,14 @@ import com.hashemmohamed98.attendeecheck.domain.security.User;
 import com.hashemmohamed98.attendeecheck.repositories.security.RoleRepository;
 import com.hashemmohamed98.attendeecheck.repositories.security.UserRepository;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -56,4 +59,21 @@ public class AdminController {
         userRepository.save(userToSave);
        return "redirect:/administration/employees";
    }     
+   
+      @PostMapping("/employee/edit")
+    public String initUpdateBeerForm(User  user) {
+
+        User oldDetailsUser= userRepository.getById(user.getId());
+            if(user instanceof User){
+                
+                if(user.getPassword().equals("")){
+                    user.setPassword(oldDetailsUser.getPassword());
+                }
+            userRepository.save(user);
+            log.debug("Update Successfully");
+            }
+        
+        return "redirect:/administration/employees";
+    }
+
 }
