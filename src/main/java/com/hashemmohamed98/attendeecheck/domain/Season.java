@@ -4,44 +4,44 @@
  */
 package com.hashemmohamed98.attendeecheck.domain;
 
-import com.hashemmohamed98.attendeecheck.domain.security.User;
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.Set;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  *
  * @author #EM
  */
-@Setter
-@Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Setter
+@Getter
 @Entity
-public class Attendance {
+public class Season {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private AttendanceStatus status;
-    private AttendanceType type;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private User user;
+    private String seasonName;
 
-    @CreationTimestamp
-    @Column(updatable = false)
-    private Timestamp createdDate;
+    private Date seasonStartDate;
+
+    private Date seasonEndDate;
+
+    private Boolean seasonActive;
+
+    @OneToMany(mappedBy = "season", fetch = FetchType.EAGER)
+    private Set<WorkingDaysAndHours> workingDaysAndHours;
 }

@@ -4,7 +4,6 @@
  */
 package com.hashemmohamed98.attendeecheck.domain.security;
 
-
 import com.hashemmohamed98.attendeecheck.domain.Attendance;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -34,7 +33,6 @@ import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,49 +40,54 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 @Entity
 public class User implements UserDetails, CredentialsContainer {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private  Integer id;
-private String name;
-private String username;
-private String password;
-private Date startDate; 
-@Singular
-@ManyToMany(cascade = {CascadeType.MERGE},fetch = FetchType.EAGER)
-@JoinTable(name = "user_role",joinColumns = {@JoinColumn(name = "USER_ID",referencedColumnName = "ID")},inverseJoinColumns ={@JoinColumn(name = "ROLE_ID",referencedColumnName = "ID")} )
-private Set<Role>  roles;
-@Transient
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String name;
+    private String username;
+    private String password;
+    private Date startDate;
+    @Singular
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns = {
+        @JoinColumn(name = "USER_ID", referencedColumnName = "ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
+    private Set<Role> roles;
+
+    @Transient
     public Set<SimpleGrantedAuthority> getAuthorities() {
         return this.roles.stream()
                 .map(Role::getAuthorities)
                 .flatMap(Set::stream)
-                .map(authortiy ->{ 
-                    return new SimpleGrantedAuthority(authortiy.getPermission());})
+                .map(authortiy -> {
+                    return new SimpleGrantedAuthority(authortiy.getPermission());
+                })
                 .collect(Collectors.toSet());
     }
-    
-  @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
-   private Set<Attendance> attendance;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<Attendance> attendance;
     @Builder.Default
-private  Boolean accountNonExpired= true;
+    private Boolean accountNonExpired = true;
 
-@Builder.Default
-private  Boolean accountNonLocked= true;
+    @Builder.Default
+    private Boolean accountNonLocked = true;
 
-@Builder.Default
-private  Boolean credentialsNonExpired= true;
-    
-@Builder.Default
-private  Boolean enabled= true;
-    
+    @Builder.Default
+    private Boolean credentialsNonExpired = true;
+
+    @Builder.Default
+    private Boolean enabled = true;
+
     @Override
     public String getPassword() {
-         return this.password;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-       return  this.username;
+        return this.username;
     }
 
     @Override
@@ -94,7 +97,7 @@ private  Boolean enabled= true;
 
     @Override
     public boolean isAccountNonLocked() {
-       return  this.accountNonLocked;
+        return this.accountNonLocked;
     }
 
     @Override
@@ -104,19 +107,18 @@ private  Boolean enabled= true;
 
     @Override
     public boolean isEnabled() {
-       return  this.enabled;
+        return this.enabled;
     }
 
     @Override
     public void eraseCredentials() {
-        this.password=null;
+        this.password = null;
     }
-    
-    
-      @CreationTimestamp
+
+    @CreationTimestamp
     @Column(updatable = false)
     private Timestamp createdDate;
-    
+
     @UpdateTimestamp
     private Timestamp lastModifiedDate;
 }
