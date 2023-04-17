@@ -5,43 +5,40 @@
 package com.hashemmohamed98.attendeecheck.domain;
 
 import com.hashemmohamed98.attendeecheck.domain.security.User;
-import java.sql.Timestamp;
-import java.util.Set;
-import javax.persistence.Column;
+import java.sql.Time;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  *
  * @author #EM
  */
-@Setter
-@Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Setter
+@Getter
 @Entity
-public class Attendance {
+@Table(name = "working_days_and_hours")
+public class WorkingDaysAndHours {
 
-    @Id
-    private Integer id;
-    private AttendanceStatus status;
-    private AttendanceType type;
+@Id
+private Integer id;
+    
+private Integer dayOfWeek ;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private User user;
+private Time openTime;
 
-    @CreationTimestamp
-    @Column(updatable = false)
-    private Timestamp createdDate;
+private Time closeTime; 
+
+ @ManyToOne(fetch = FetchType.EAGER)
+private Season season;
 }
