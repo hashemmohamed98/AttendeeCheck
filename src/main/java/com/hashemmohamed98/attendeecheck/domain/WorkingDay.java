@@ -4,16 +4,16 @@
  */
 package com.hashemmohamed98.attendeecheck.domain;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,27 +32,28 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Setter
 @Getter
 @Entity
-public class Season {
+public class WorkingDay {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Integer dayId;
 
-    private String seasonName;
+    private Day dayOfWeek;
 
-    private Date seasonStartDate;
+    private Boolean workDay;
 
-    private Date seasonEndDate;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Season season;
 
-    private Boolean seasonActive;
-
-    @OneToMany(mappedBy = "season", fetch = FetchType.EAGER)
-    private List <WorkingDay> workingDays;
+    @OneToMany(mappedBy = "workingDay", fetch = FetchType.EAGER)
+    private List<WorkingHours> workingHours;
 
     @CreationTimestamp
     @Column(updatable = false)
     private Timestamp createdDate;
-
+    
     @UpdateTimestamp
     private Timestamp lastModifiedDate;
+    @Transient
+    private WorkingHours dayWorkingHours;
+    
 }
