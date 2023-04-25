@@ -4,18 +4,20 @@
  */
 package com.hashemmohamed98.attendeecheck.domain;
 
-import com.hashemmohamed98.attendeecheck.domain.security.User;
 import java.sql.Time;
+import java.sql.Timestamp;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  *
@@ -27,18 +29,23 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "working_days_and_hours")
-public class WorkingDaysAndHours {
+public class WorkingHours {
 
-@Id
-private Integer id;
+    @Id
+    private Integer hourId;
     
-private Integer dayOfWeek ;
+    private Time openTime;
 
-private Time openTime;
+    private Time closeTime;
 
-private Time closeTime; 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private WorkingDay workingDay;
 
- @ManyToOne(fetch = FetchType.EAGER)
-private Season season;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private Timestamp createdDate;
+
+    @UpdateTimestamp
+    private Timestamp lastModifiedDate;
+
 }

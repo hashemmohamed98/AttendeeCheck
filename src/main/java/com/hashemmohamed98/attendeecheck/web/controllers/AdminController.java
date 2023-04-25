@@ -5,20 +5,21 @@
 package com.hashemmohamed98.attendeecheck.web.controllers;
 
 import com.hashemmohamed98.attendeecheck.domain.Season;
+import com.hashemmohamed98.attendeecheck.domain.WorkingDay;
+import com.hashemmohamed98.attendeecheck.domain.WorkingHours;
 import com.hashemmohamed98.attendeecheck.domain.security.Role;
 import com.hashemmohamed98.attendeecheck.domain.security.User;
 import com.hashemmohamed98.attendeecheck.repositories.SeasonRepository;
+import com.hashemmohamed98.attendeecheck.repositories.WorkingDaysRepository;
+import com.hashemmohamed98.attendeecheck.repositories.WorkingHoursRepository;
 import com.hashemmohamed98.attendeecheck.repositories.security.RoleRepository;
 import com.hashemmohamed98.attendeecheck.repositories.security.UserRepository;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -35,6 +36,8 @@ public class AdminController {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final SeasonRepository seasonRepository;
+    private final WorkingDaysRepository workingDaysRepository;
+    private final WorkingHoursRepository workingHoursRepository;
 
     @GetMapping("/employees")
     public String employeesConfig(Model model) {
@@ -42,42 +45,6 @@ public class AdminController {
         List<User> users = userRepository.findAll();
         model.addAttribute("employees", users);
         return "admin/employees";
-    }
-
-    @GetMapping("/seasons")
-    public String seasonsConfig(Model model) {
-
-        List<Season> seasons = seasonRepository.findAll();
-        model.addAttribute("seasons", seasons);
-        return "admin/seasons";
-    }
-
-    @GetMapping("/season/add")
-    public String seasonInitCreationForm(Model model) {
-
-        model.addAttribute("season", Season.builder().build());
-        return "admin/addSeason";
-    }
-
-    @PostMapping("/season/add")
-    public String seasonCrocessCreationForm(Season season) {
-
-        Season newSeason = Season.builder().seasonName(season.getSeasonName())
-                .seasonStartDate(season.getSeasonStartDate())
-                .seasonEndDate(season.getSeasonEndDate())
-                .seasonActive(season.getSeasonActive())
-                .build();
-
-        seasonRepository.save(newSeason);
-        return "redirect:/administration/seasons";
-    }
-
-    @PostMapping("/season/edit")
-    public String initUpdateSeasonForm(Season season) {
-
-        seasonRepository.save(season);
-
-        return "redirect:/administration/seasons";
     }
 
     @GetMapping("/employee/add")
@@ -117,4 +84,93 @@ public class AdminController {
         return "redirect:/administration/employees";
     }
 
+    @GetMapping("/seasons")
+    public String seasonsConfig(Model model) {
+
+        List<Season> seasons = seasonRepository.findAll();
+        model.addAttribute("seasons", seasons);
+        return "admin/seasons";
+    }
+
+    @GetMapping("/season/add")
+    public String seasonInitCreationForm(Model model) {
+
+        model.addAttribute("season", Season.builder().build());
+        return "admin/addSeason";
+    }
+
+    @PostMapping("/season/add")
+    public String seasonCrocessCreationForm(Season season) {
+
+        Season newSeason = Season.builder().seasonName(season.getSeasonName())
+                .seasonStartDate(season.getSeasonStartDate())
+                .seasonEndDate(season.getSeasonEndDate())
+                .seasonActive(season.getSeasonActive())
+                .build();
+
+        seasonRepository.save(newSeason);
+        return "redirect:/administration/seasons";
+    }
+
+    @PostMapping("/season/edit")
+    public String initUpdateSeasonForm(Season season) {
+
+        seasonRepository.save(season);
+
+        return "redirect:/administration/seasons";
+    }
+
+    @GetMapping("/workingdays")
+    public String workingDAHConfig(Model model) {
+
+    
+     
+        List<Season> seasons = seasonRepository.findAll();
+
+        model.addAttribute("seasons", seasons);
+        return "admin/workingDays";
+    }
+
+
+    @GetMapping("/workingdays/add")
+    public String workingDAHInitCreationForm(Model model) {
+        List<Season> seasons = seasonRepository.findAll();
+        model.addAttribute("seasons", seasons);
+        model.addAttribute("workingdays", WorkingDay.builder().build());
+        return "admin/addWorkingDays";
+    }
+//
+//    @PostMapping("/workingdays/add")
+//    public String workingDAHCrocessCreationForm(WorkingDaysAndHours workingDaysAndHours) {
+//
+////        WorkingDaysAndHours newWorkingDaysAndHours = WorkingDaysAndHours.builder().(season.getSeasonName())
+////                .seasonStartDate(season.getSeasonStartDate())
+////                .seasonEndDate(season.getSeasonEndDate())
+////                .seasonActive(season.getSeasonActive())
+////                .build();
+//
+//        workingDaysAndHoursRepository.save(workingDaysAndHours);
+//        return "redirect:/administration/workingdays";
+//    }
+//
+
+    @PostMapping("/workingdays/edit")
+    public String workingDAHUpdateSeasonForm(WorkingDay workingDay, WorkingHours workingHours) {
+
+        if (workingDay instanceof WorkingDay && workingHours instanceof WorkingHours) {
+
+            if (workingDay.getSeason() == null) {
+                WorkingDay oldWorkingDay = workingDaysRepository.getById(workingDay.getDayId());
+                workingDay.setSeason(oldWorkingDay.getSeason());
+
+            }
+
+            workingDaysRepository.save(workingDay);
+            workingHours.setWorkingDay(workingDay);
+            workingHoursRepository.save(workingHours);
+        }
+        log.debug("Season Id " + workingDay.getSeason().getId());
+        return "redirect:/administration/workingdays";
+
+    }
 }

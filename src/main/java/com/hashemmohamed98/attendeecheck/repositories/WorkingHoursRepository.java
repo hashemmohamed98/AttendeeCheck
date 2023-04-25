@@ -4,13 +4,13 @@
  */
 package com.hashemmohamed98.attendeecheck.repositories;
 
-import com.hashemmohamed98.attendeecheck.domain.WorkingDaysAndHours;
+import com.hashemmohamed98.attendeecheck.domain.WorkingHours;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author #EM
  */
-public interface WorkingDaysAndHoursRepository extends JpaRepository<WorkingDaysAndHours, Integer>{
+public interface WorkingHoursRepository extends JpaRepository<WorkingHours, Integer>{
     
 }
