@@ -14,6 +14,7 @@ import com.hashemmohamed98.attendeecheck.repositories.WorkingDaysRepository;
 import com.hashemmohamed98.attendeecheck.repositories.WorkingHoursRepository;
 import com.hashemmohamed98.attendeecheck.repositories.security.RoleRepository;
 import com.hashemmohamed98.attendeecheck.repositories.security.UserRepository;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -128,6 +130,7 @@ public class AdminController {
         List<Season> seasons = seasonRepository.findAll();
 
         model.addAttribute("seasons", seasons);
+        model.addAttribute("workday" ,  WorkingDay.builder().build());
         return "admin/workingDays";
     }
 
@@ -136,28 +139,27 @@ public class AdminController {
     public String workingDAHInitCreationForm(Model model) {
         List<Season> seasons = seasonRepository.findAll();
         model.addAttribute("seasons", seasons);
-        model.addAttribute("workingdays", WorkingDay.builder().build());
+        model.addAttribute("workdays", WorkingDay.builder().build());
         return "admin/addWorkingDays";
     }
 //
-//    @PostMapping("/workingdays/add")
-//    public String workingDAHCrocessCreationForm(WorkingDaysAndHours workingDaysAndHours) {
-//
-////        WorkingDaysAndHours newWorkingDaysAndHours = WorkingDaysAndHours.builder().(season.getSeasonName())
-////                .seasonStartDate(season.getSeasonStartDate())
-////                .seasonEndDate(season.getSeasonEndDate())
-////                .seasonActive(season.getSeasonActive())
-////                .build();
-//
-//        workingDaysAndHoursRepository.save(workingDaysAndHours);
-//        return "redirect:/administration/workingdays";
-//    }
-//
+    @PostMapping( "/workingdays/add")
+    public String workingDAHCrocessCreationForm( @RequestBody List<WorkingDay> workingDays) {
+    for(WorkingDay workingDay : workingDays){
+        
+        workingDay.getWorkingHours().setWorkingDay(workingDay);
+  
+    }
+workingDaysRepository.saveAll(workingDays);
+
+        return "redirect:/administration/workingdays";
+    }
+
 
     @PostMapping("/workingdays/edit")
-    public String workingDAHUpdateSeasonForm(WorkingDay workingDay, WorkingHours workingHours) {
+    public String workingDAHUpdateSeasonForm(WorkingDay workingDay) {
 
-        if (workingDay instanceof WorkingDay && workingHours instanceof WorkingHours) {
+        if (workingDay instanceof WorkingDay ) {
 
             if (workingDay.getSeason() == null) {
                 WorkingDay oldWorkingDay = workingDaysRepository.getById(workingDay.getDayId());
@@ -166,10 +168,11 @@ public class AdminController {
             }
 
             workingDaysRepository.save(workingDay);
-            workingHours.setWorkingDay(workingDay);
-            workingHoursRepository.save(workingHours);
+            
+            workingHoursRepository.save(workingDay.getWorkingHours());
         }
-        log.debug("Season Id " + workingDay.getSeason().getId());
+
+
         return "redirect:/administration/workingdays";
 
     }

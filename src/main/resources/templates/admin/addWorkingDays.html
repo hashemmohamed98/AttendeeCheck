@@ -14,6 +14,7 @@
         <!-- Custom fonts for this template-->
     <th:block th:replace="fragments/headers "></th:block>
 
+
 </head>
 
 <body id="page-top">
@@ -44,83 +45,84 @@
                             <div class="col-12 p-0">
                                 <div class="main-card card">
                                     <div class="card-body">
-                                        <!-- Page Form -->
-                                        <form class="w-100" id="season_form" th:object="${workingdays}" method="post" >
+                                        <div class="col-md-5">
+                                            <div class=" form-group">
+                                                <label for="seasons" class="col-sm-4 "> Season</label>
+                                                <select class="form-control" name="season" id="season"  onchange="ShowFormTable()">
+                                                    <option value="" selected disabled></option>
+                                                    <option th:each="season : ${seasons}" th:value="${season.id}" th:text="${season.seasonName}"></option>
 
-                                            <!-- Form Inputs -->
+                                                </select>
 
-                                            <div class="col-md-5">
-                                                <div class=" form-group">
-                                                    <label for="seasons" class="col-sm-4 "> Season</label>
-                                                    <select class="form-control" name="season" id="season"  onchange="doSomething()">
-                                                        <option value="" selected disabled></option>
-                                                        <option th:each="season : ${seasons}" th:value="${season.id}" th:text="${season.seasonName}"></option>
-
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                    </div>
-                                    <div class=" form-group">
-                                        <div class="col-md-12">
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Day</th>
-                                                            <th> Start Time</th>
-                                                            <th> End Time</th>
-                                                            <th> Day Status</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr th:each="Eday : ${T(com.hashemmohamed98.attendeecheck.domain.Day).values()}">
-
-                                                            <td th:text="${Eday}"></td>
-                                                            <td>
-                                                                <input id="startingHour"  type="time"  name="openTime" placeholder="Open Hour"  step="1" class="form-control form-control-user" pattern="([01]?[0-9]{1}|2[0-3]{1}):[0-5]{1}[0-9]{1}" required >
-                                                            </td>
-                                                            <td>
-                                                                <input id="closeHour"  type="time"  name="closeTime" placeholder="Ending Hour" step="1" class="form-control form-control-user" pattern="([01]?[0-9]{1}|2[0-3]{1}):[0-5]{1}[0-9]{1}" required >
-
-                                                            </td>
-                                                            <td>
-                                                                <div class="col-sm-4  d-flex align-items-center"  id="seasonactive">
-                                                                    <div class="custom-radio custom-control custom-control-inline">
-                                                                        <input type="radio" name="workDay" id="choice1" value="1" class=" custom-control-input" required >
-                                                                        <label class=" custom-control-label" for="choice1"> Work </label>   
-                                                                    </div>
-                                                                    <div class="custom-radio custom-control custom-control-inline">
-                                                                        <input type="radio" name="workDay" id="choice2" value="0" class="custom-control-input" required>
-                                                                        <label class="custom-control-label" for="choice2"> Off</label>   
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- Page Form -->
+                                    <form class="w-100 d-none" id="season_form" th:object="${workdays}" method="post" >
+
+                                        <!-- Form Inputs -->
 
 
-                                    <!-- Form Buttons -->
-                                    <div class="row mt-6">
-                                        <div class="col-12 col-md-4 offset-md-4">
-                                            <div class="row">
-                                                <div class="col-12 col-xl col-lg-6 mb-lg-0 mb-3">
-                                                    <button type="submit" class="btn btn-primary btn-block font-weight-bold" >
-                                                        <span class="btn-icon-wrapper pr-2 opacity-7">
-                                                            <i class="fa fa-plus fa-w-20"></i>
-                                                        </span>
-                                                        Add
-                                                        <span class="spinner-border d-none" role="status" aria-hidden="true"></span>
-                                                    </button>
+                                        <div class=" form-group">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Day</th>
+                                                                <th> Start Time</th>
+                                                                <th> End Time</th>
+                                                                <th> Day Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr th:each="Eday : ${T(com.hashemmohamed98.attendeecheck.domain.Day).values()}">
+
+                                                                <td th:id="day + ${Eday.ordinal}" th:text="${Eday}" th:value="${Eday}" th:field="*{dayOfWeek}"name="workingDay"></td>
+                                                                <td>
+                                                                    <input th:id="startingHour+${Eday.ordinal}"  type="time"  name="openTime" placeholder="Open Hour" autocomplete="on" step="1" class="form-control form-control-user" pattern="([01]?[0-9]{1}|2[0-3]{1}):[0-5]{1}[0-9]{1}" required >
+                                                                </td>
+                                                                <td>
+                                                                    <input th:id="closeHour +${Eday.ordinal}"  type="time"  name="closeTime" placeholder="Ending Hour"  autocomplete="on"  step="1" class="form-control form-control-user" pattern="([01]?[0-9]{1}|2[0-3]{1}):[0-5]{1}[0-9]{1}" required >
+
+                                                                </td>
+                                                                <td>
+                                                                    <div class="col-sm-4  d-flex align-items-center"  th:id="dayStatus + ${Eday.ordinal}">
+                                                                        <div class="custom-radio custom-control custom-control-inline">
+                                                                            <input type="radio" th:name="workDay + ${Eday.ordinal}" th:id="choice1 + ${Eday.ordinal}" value="1" class=" custom-control-input" required >
+                                                                            <label class=" custom-control-label" th:for="choice1 + ${Eday.ordinal}"> Work </label>   
+                                                                        </div>
+                                                                        <div class="custom-radio custom-control custom-control-inline">
+                                                                            <input type="radio" th:name="workDay + ${Eday.ordinal}" th:id="choice2 + ${Eday.ordinal}" value="0" class="custom-control-input" required>
+                                                                            <label class="custom-control-label" th:for="choice2 + ${Eday.ordinal}"> Off</label>   
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- Form Buttons End -->
+
+
+                                        <!-- Form Buttons -->
+                                        <div class="row mt-6">
+                                            <div class="col-12 col-md-4 offset-md-4">
+                                                <div class="row">
+                                                    <div class="col-12 col-xl col-lg-6 mb-lg-0 mb-3">
+                                                        <button id="submitBtn" type="button" class="btn btn-primary btn-block font-weight-bold" onclick="submitFormDetails()">
+                                                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                                                <i class="fa fa-plus fa-w-20"></i>
+                                                            </span>
+                                                            Add
+                                                            <span class="spinner-border d-none" role="status" aria-hidden="true"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Form Buttons End -->
 
                                     </form>
                                 </div>
@@ -137,33 +139,33 @@
                     </div>
                 </div>
             </div>
+            <div id="alert-container"></div>
+            <!-- /.container-fluid -->
+
+
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <th:block th:replace="fragments/footer "></th:block>
+            <!-- End of Footer -->
         </div>
     </div>
-    <!-- /.container-fluid -->
 
+    <!-- End of Content Wrapper -->
 
-    <!-- End of Main Content -->
+    <!-- End of Page Wrapper -->
 
-    <!-- Footer -->
-<th:block th:replace="fragments/footer "></th:block>
-<!-- End of Footer -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
 
-</div>
-<!-- End of Content Wrapper -->
-
-</div>
-<!-- End of Page Wrapper -->
-
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
-
-<!-- Logout Modal-->
+    <!-- Logout Modal-->
 <th:block th:replace="fragments/logoutModal "></th:block>
 
 <!-- Bootstrap core JavaScript-->
 <th:block th:replace="fragments/templateScripts "></th:block>
+<script th:src="@{/resources/js/new/ac-workingDaysAndHours.js}"></script>
 </body>
 
 </html>

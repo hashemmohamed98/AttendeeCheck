@@ -9,8 +9,10 @@ import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,13 +34,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class WorkingHours {
 
     @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer hourId;
     
     private Time openTime;
 
     private Time closeTime;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     private WorkingDay workingDay;
 
     @CreationTimestamp
