@@ -86,12 +86,12 @@
                                                         </thead>
                                                         <tbody>
                                                         <th:block  th:each="day : ${season.getWorkingDays}">
-                                                            <th:block th:if= "${day.getWorkingHours.size != 0}" >
+                                                            <th:block th:if= "${day.getWorkingHours != null}" >
                                                                 <tr>
                                                                     <td th:id="dow+ ${day.dayId}" th:text="${day.getDayOfWeek}" th:val="${day.getDayOfWeek.name}"></td>    
-                                                                <th:block  th:each="hour : ${day.getWorkingHours}">
-                                                                    <td th:id="ot+ ${hour.hourId}" th:text="${hour.getOpenTime}"></td>
-                                                                    <td th:id="ct+ ${hour.hourId}" th:text="${hour.getCloseTime}"></td>
+                                                         
+                                                                    <td th:id="ot+ ${day.getWorkingHours().getHourId()}" th:text="${day.getWorkingHours().getOpenTime()}"></td>
+                                                                    <td th:id="ct+ ${day.getWorkingHours().getHourId()}" th:text="${day.getWorkingHours().getCloseTime()}"></td>
 
                                                                     <th:block th:switch="${day.workDay}" >
 
@@ -99,8 +99,8 @@
                                                                         <td  th:case="false" th:id="dtype+ ${day.dayId}" th:text="Off"></td>
                                                                     </th:block>
 
-                                                                    <td> <button id="edit" class="btn" data-toggle="modal" data-target="#exampleModal"   data-th-onclick="'showWorkingDayDetails(' + ${day.dayId} +','+ ${hour.hourId}+','+ ${season.id}+ ')'" style="border:none; background-color: white"><i class="fas fa-fw fa-pen" style="color: #007bff"></i></button></td>
-                                                                </th:block>
+                                                                    <td> <button id="edit" class="btn" data-toggle="modal" data-target="#exampleModal"   data-th-onclick="'showWorkingDayDetails(' + ${day.dayId} +','+ ${day.getWorkingHours().getHourId()}+','+ ${season.id}+ ')'" style="border:none; background-color: white"><i class="fas fa-fw fa-pen" style="color: #007bff"></i></button></td>
+                                                            
 
                                                                 </tr>
                                                                 </tbody>
@@ -136,25 +136,26 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form class="user"  th:action="@{workingdays/edit}" th:object="${workingDay}" method="post">
+                            <form class="user"  th:action="@{workingdays/edit}" th:object="${workday}" method="post">
 
                                 <div class="form-group ">
                                     <label id="dayOfWeekName" for="dayOfWeek" class="col-sm-4 control-label"></label>
                                     <input  id="dayOfWeek" type="hidden" name="dayOfWeek">
 
                                 </div>
-                                <th:block th:object="${workingHours}" >
+                                
                                     <div class="form-group ">
 
                                         <label for="startingHour" class="col-sm-4 control-label"> Starting Hour </label>
-                                        <input id="startingHour"  type="time"  name="openTime" placeholder="Open Hour"  step="1" class="form-control form-control-user" pattern="([01]?[0-9]{1}|2[0-3]{1}):[0-5]{1}[0-9]{1}" required >
+                                        <input id="startingHour"  type="time"  th:field="*{workingHours.openTime}"  placeholder="Open Hour"  step="1" class="form-control form-control-user" pattern="([01]?[0-9]{1}|2[0-3]{1}):[0-5]{1}[0-9]{1}" required >
 
                                     </div>
                                     <div class="form-group ">
 
                                         <label for="closeHour" class="col-sm-4 control-label"> Ending Hour </label>
-                                        <input id="closeHour"  type="time"  name="closeTime" placeholder="Ending Hour" step="1" class="form-control form-control-user" pattern="([01]?[0-9]{1}|2[0-3]{1}):[0-5]{1}[0-9]{1}" required >
-                                        <input id="whid" name="hourId" type="hidden"/>
+                                        <input id="closeHour"  type="time" th:field="*{workingHours.closeTime}"   placeholder="Ending Hour" step="1" class="form-control form-control-user" pattern="([01]?[0-9]{1}|2[0-3]{1}):[0-5]{1}[0-9]{1}" required >
+                                        <input id="whid"  th:field="*{workingHours.hourId}"  type="hidden">
+                                        <input id="whdayid" th:field="*{workingHours.workingDay}" type="hidden"/>    
                                     </div>
                                 </th:block>
                                 <div class="form-group ">
@@ -170,7 +171,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <input id="dayid" name="dayId" type="hidden"/>        
+                                <input id="dayid" name="dayId" type="hidden"/>     
                                 <input id="seasonId" name="season" type="hidden"/>        
                                 <button type="submit" class="btn btn-primary float-right">Save changes</button>
                             </form>

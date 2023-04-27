@@ -35,7 +35,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class Season {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String seasonName;
