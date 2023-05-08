@@ -8,6 +8,7 @@ package com.hashemmohamed98.attendeecheck.domain;
  *
  * @author #EM
  */
-public enum Day {
-  Sunday,  Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+public enum AttendanceLocation {
+    Onsite,Offpremises
+    
 }

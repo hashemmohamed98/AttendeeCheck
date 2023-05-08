@@ -51,6 +51,9 @@ public class WorkingDay {
 
     @OneToOne(mappedBy = "workingDay",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private WorkingHours workingHours;
+    
+    @OneToMany(mappedBy = "workingDay", fetch = FetchType.EAGER)
+    private List<Attendance> attendance;
 
     @CreationTimestamp
     @Column(updatable = false)

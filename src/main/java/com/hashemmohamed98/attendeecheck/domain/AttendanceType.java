@@ -9,5 +9,5 @@ package com.hashemmohamed98.attendeecheck.domain;
  * @author #EM
  */
 public enum AttendanceType {
-    CHECKIN,CHECKOUT
+    Checkin,Checkout
 }

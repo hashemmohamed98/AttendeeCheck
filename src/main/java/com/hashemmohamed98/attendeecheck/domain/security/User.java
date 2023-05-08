@@ -7,6 +7,7 @@ package com.hashemmohamed98.attendeecheck.domain.security;
 import com.hashemmohamed98.attendeecheck.domain.Attendance;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
@@ -67,7 +68,8 @@ public class User implements UserDetails, CredentialsContainer {
     }
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private Set<Attendance> attendance;
+    private List<Attendance> attendance;
+    
     @Builder.Default
     private Boolean accountNonExpired = true;
 

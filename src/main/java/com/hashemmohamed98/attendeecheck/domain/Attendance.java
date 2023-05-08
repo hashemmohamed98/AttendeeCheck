@@ -6,6 +6,7 @@ package com.hashemmohamed98.attendeecheck.domain;
 
 import com.hashemmohamed98.attendeecheck.domain.security.User;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,6 +41,12 @@ public class Attendance {
     private Integer id;
     private AttendanceStatus status;
     private AttendanceType type;
+    private AttendanceLocation location;
+    private String notes;
+    private LocalDate attendanceDate;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    private WorkingDay workingDay;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
@@ -47,4 +54,8 @@ public class Attendance {
     @CreationTimestamp
     @Column(updatable = false)
     private Timestamp createdDate;
+
+    @UpdateTimestamp
+    private Timestamp lastModifiedDate;
+
 }
